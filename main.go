@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	wifiname "git.okki.hu/garrichs/wifi-name"
 	"github.com/kelseyhightower/envconfig"
-	wifiname "github.com/yelinaung/wifi-name"
 )
 
 func main() {
@@ -18,6 +18,9 @@ func main() {
 }
 
 func checkWifi() {
-	n := wifiname.WifiName()
-	fmt.Println(n)
+	ssid, err := wifiname.GetSSID()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(ssid)
 }
