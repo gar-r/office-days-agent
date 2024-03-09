@@ -1,5 +1,7 @@
 git.okki.hu/garrichs/wifi-name v0.1.0 h1:a4A9y1nA1UnEjPiZfk/KZ1YN8ynSKcf/P8Gr/Nwkz+U=
 git.okki.hu/garrichs/wifi-name v0.1.0/go.mod h1:/yJEB5FvOpVSsgBijHTKkJD4h5ZuyLwniJ4XrkQ1ZOs=
+git.okki.hu/garrichs/wifi-name v0.2.0 h1:b7UPYKJKltDTaTzTtuldZmq5KNm9DTXyz5qkAIqshEE=
+git.okki.hu/garrichs/wifi-name v0.2.0/go.mod h1:/yJEB5FvOpVSsgBijHTKkJD4h5ZuyLwniJ4XrkQ1ZOs=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/kelseyhightower/envconfig v1.4.0 h1:Im6hONhd3pLkfDFsbRgu68RDNkGF1r3dvMUtDTo2cv8=
