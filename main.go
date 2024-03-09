@@ -8,8 +8,9 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
+var conf Conf
+
 func main() {
-	var conf Conf
 	envconfig.MustProcess(EnvConfigPrefix, &conf)
 	t := time.NewTicker(time.Duration(conf.PollIntervalSeconds) * time.Second)
 	for range t.C {
@@ -18,7 +19,7 @@ func main() {
 }
 
 func checkWifi() {
-	ssid, err := wifiname.GetSSID()
+	ssid, err := wifiname.GetSSID(conf.WifiDeviceName)
 	if err != nil {
 		fmt.Println(err)
 	}
