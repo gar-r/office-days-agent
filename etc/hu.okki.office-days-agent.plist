@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>hu.okki.office-days-agent</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/office-days-agent</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>OFFICE_DAYS_WIFI_NAME</key>
+        <string>Qubes HU</string>
+        <key>GIN_MODE</key>
+        <string>release</string>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/usr/local/office-days-agent/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/usr/local/office-days-agent/stderr.log</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
