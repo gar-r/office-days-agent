@@ -9,6 +9,7 @@
             "program": "${fileDirname}",
             "env": {
                 "OFFICE_DAYS_WIFI_NAME": "Qubes HU",
+                "GIN_MODE": "debug",
             }
         }
     ]
