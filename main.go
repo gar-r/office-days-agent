@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	wifiname "git.okki.hu/garrichs/wifi-name"
@@ -9,19 +9,24 @@ import (
 )
 
 var conf Conf
+var store Store
 
 func main() {
 	envconfig.MustProcess(EnvConfigPrefix, &conf)
+	store = NewFileStore(conf.DataPath)
 	t := time.NewTicker(time.Duration(conf.PollIntervalSeconds) * time.Second)
 	for range t.C {
-		checkWifi()
+		if usingOfficeWifi() {
+			store.Flag()
+		}
 	}
 }
 
-func checkWifi() {
+func usingOfficeWifi() bool {
 	ssid, err := wifiname.GetSSID(conf.WifiDeviceName)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
+		return false
 	}
-	fmt.Println(ssid)
+	return conf.WifiName == ssid
 }
