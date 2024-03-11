@@ -7,14 +7,23 @@ import (
 	wifiname "git.okki.hu/garrichs/wifi-name"
 )
 
+const DateFormat = "20060102"
+
 func startOfficeMonitor(pollInterval int) {
 	t := time.NewTicker(time.Duration(pollInterval) * time.Second)
 	for range t.C {
-		if usingOfficeWifi() {
-			err := store.Flag()
-			if err != nil {
-				log.Println(err)
-			}
+		date := time.Now().Format(DateFormat)
+		od, err := store.Lookup(date)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if od {
+			continue // already logged office
+		}
+		err = store.Save(date, usingOfficeWifi())
+		if err != nil {
+			log.Println(err)
 		}
 	}
 }

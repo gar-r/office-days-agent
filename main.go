@@ -2,20 +2,30 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/kelseyhightower/envconfig"
 )
 
 var conf Conf
-var store Store
+var store DB
 
 func main() {
-	envconfig.MustProcess(EnvConfigPrefix, &conf)
-	store = NewFileStore(conf.DataPath)
+	setup()
 	go func() {
 		log.Println("starting office monitor...")
 		startOfficeMonitor(conf.PollIntervalSeconds)
 	}()
 	log.Println("starting api server...")
 	startApiServer(conf.ApiServerPort)
+}
+
+func setup() {
+	envconfig.MustProcess(EnvConfigPrefix, &conf)
+	conf.DBPath = os.ExpandEnv(conf.DBPath)
+	var err error
+	store, err = NewBadger(conf.DBPath)
+	if err != nil {
+		panic(err)
+	}
 }

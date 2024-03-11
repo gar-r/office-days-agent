@@ -17,7 +17,7 @@ func startApiServer(port int) {
 }
 
 func listHandler(ctx *gin.Context) {
-	data, err := store.Load()
+	data, err := store.LoadAll()
 	if err != nil {
 		ctx.Status(http.StatusInternalServerError)
 	}
