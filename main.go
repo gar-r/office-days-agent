@@ -23,9 +23,5 @@ func main() {
 func setup() {
 	envconfig.MustProcess(EnvConfigPrefix, &conf)
 	conf.DBPath = os.ExpandEnv(conf.DBPath)
-	var err error
-	store, err = NewBadger(conf.DBPath)
-	if err != nil {
-		panic(err)
-	}
+	store = NewDiskDB(conf.DBPath)
 }

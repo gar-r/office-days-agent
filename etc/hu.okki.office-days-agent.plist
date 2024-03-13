@@ -19,8 +19,6 @@
     <string>/usr/local/office-days-agent/stdout.log</string>
     <key>StandardErrorPath</key>
     <string>/usr/local/office-days-agent/stderr.log</string>
-    <key>RunAtLoad</key>
-    <true/>
     <key>KeepAlive</key>
     <true/>
 </dict>

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dgraph-io/badger/v4"
+	"github.com/peterbourgon/diskv/v3"
 )
 
 type DB interface {
@@ -13,79 +13,58 @@ type DB interface {
 	LoadAll() (map[string]bool, error)
 	// Clear all data
 	Clear() error
-	// Close the db
-	Close()
 }
 
-type Badger struct {
-	db *badger.DB
+type DiskDB struct {
+	db *diskv.Diskv
 }
 
-func NewBadger(path string) (*Badger, error) {
-	db, err := badger.Open(badger.DefaultOptions(path))
-	if err != nil {
-		return nil, err
+func NewDiskDB(path string) *DiskDB {
+	return &DiskDB{
+		db: diskv.New(diskv.Options{
+			BasePath: path,
+			Transform: func(s string) []string {
+				return []string{} // put all keys in base dir
+			},
+		}),
 	}
-	return &Badger{db}, nil
 }
 
 // Save a given date
-func (b *Badger) Save(date string, office bool) error {
-	return b.db.Update(func(txn *badger.Txn) error {
-		var b byte
-		if office {
-			b = 1
-		}
-		return txn.Set([]byte(date), []byte{b})
-	})
+func (d *DiskDB) Save(date string, office bool) error {
+	var b byte = 0
+	if office {
+		b = 1
+	}
+	return d.db.Write(date, []byte{b})
 }
 
 // Lookup a given date
-func (b *Badger) Lookup(date string) (bool, error) {
-	res := false
-	err := b.db.View(func(txn *badger.Txn) error {
-		item, err := txn.Get([]byte(date))
-		if err == badger.ErrKeyNotFound {
-			return nil
-		}
-		if err != nil {
-			return err
-		}
-		return item.Value(func(val []byte) error {
-			if len(val) > 0 && val[0] == 1 {
-				res = true
-			}
-			return nil
-		})
-	})
-	return res, err
+func (d *DiskDB) Lookup(date string) (bool, error) {
+	if !d.db.Has(date) {
+		return false, nil
+	}
+	res, err := d.db.Read(date)
+	if err != nil {
+		return false, err
+	}
+	return res[0] == 1, nil
 }
 
 // Load all dates
-func (b *Badger) LoadAll() (map[string]bool, error) {
+func (d *DiskDB) LoadAll() (map[string]bool, error) {
 	res := make(map[string]bool)
-	err := b.db.View(func(txn *badger.Txn) error {
-		it := txn.NewIterator(badger.DefaultIteratorOptions)
-		defer it.Close()
-		for it.Rewind(); it.Valid(); it.Next() {
-			item := it.Item()
-			date := string(item.Key())
-			return item.Value(func(val []byte) error {
-				res[date] = len(val) > 0 && val[0] == 1
-				return nil
-			})
+	for key := range d.db.Keys(make(<-chan struct{})) {
+		val, err := d.db.Read(key)
+		if err != nil {
+			return nil, err
 		}
-		return nil
-	})
-	return res, err
+		res[key] = val[0] == 1
+	}
+	return res, nil
 }
 
 // Clear all data
-func (b *Badger) Clear() error {
-	return b.db.DropAll()
-}
-
-// Close the db
-func (b *Badger) Close() {
-	b.db.Close()
+func (d *DiskDB) Clear() error {
+	return d.db.EraseAll()
 }

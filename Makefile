@@ -16,6 +16,7 @@ install: build
 	chmod 755 $(INSTALL_DIR)/$(BIN_NAME)
 	ln -sf $(INSTALL_DIR)/$(BIN_NAME) $(BIN_DIR)/$(BIN_NAME)
 	cp etc/$(PLIST_NAME) $(PLIST_DIR)/
+	chown root:wheel $(PLIST_DIR)/$(PLIST_NAME)
 	chmod 644 $(PLIST_DIR)/$(PLIST_NAME)
 
 uninstall:
