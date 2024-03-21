@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	wifiname "git.okki.hu/garrichs/wifi-name"
+	wifiname "github.com/gar-r/wifi-name"
 )
 
 const DateFormat = "20060102"
